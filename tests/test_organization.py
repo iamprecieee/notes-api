@@ -15,3 +15,10 @@ async def test_create_organization(client: AsyncClient):
     assert data["data"]["name"] == "Test Corp"
     assert "id" in data["data"]
     assert "created_at" in data["data"]
+
+    response2 = await client.post(
+        "/organizations/",
+        json={"name": "Test Corp"},
+    )
+
+    assert response2.status_code == 409

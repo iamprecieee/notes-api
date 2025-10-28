@@ -70,8 +70,6 @@ class CreateNoteRequest(BaseModel):
     @classmethod
     def validate_content(cls, value: str) -> str:
         if len(value) < 1:
-            raise ValidationError(
-                detail="Note content must be at least 1 character"
-            )
+            raise ValidationError(detail="Note content must be at least 1 character")
 
         return value

@@ -113,7 +113,7 @@ async def test_delete_note_as_reader_fails(
 async def test_unauthenticated_access_fails(client: AsyncClient):
     response = await client.get("/notes/")
 
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.asyncio

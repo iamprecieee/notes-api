@@ -13,6 +13,7 @@ from core.exceptions import (
     NotFoundError,
     ValidationError,
 )
+from core.middleware import AuthMiddleware
 
 
 @asynccontextmanager
@@ -32,6 +33,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.add_middleware(AuthMiddleware)
 
 
 @app.exception_handler(AuthenticationError)

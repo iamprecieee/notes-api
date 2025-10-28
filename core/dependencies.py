@@ -1,12 +1,8 @@
-from typing import Annotated
-
-from fastapi import Depends, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import JWTError
+from fastapi import Request
+from fastapi.security import HTTPBearer
 from pydantic import BaseModel
 
 from core.exceptions import AuthenticationError
-from core.security import decode_access_token
 from services.auth import AuthService
 from services.note import NoteService
 from services.organization import OrganizationService
@@ -23,26 +19,12 @@ class CurrentUser(BaseModel):
 
 
 async def get_current_user(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
+    request: Request,
 ) -> CurrentUser:
-    try:
-        token = credentials.credentials
-        payload = decode_access_token(token)
+    if not hasattr(request.state, "user") or request.state.user is None:
+        raise AuthenticationError(detail="Authentication required")
 
-        return CurrentUser(
-            id=payload["user_id"],
-            org_id=payload["org_id"],
-            role=payload["role"],
-            email=payload["email"],
-        )
-    except JWTError:
-        raise AuthenticationError(
-            detail="Invalid authentication token",
-        )
-    except KeyError:
-        raise AuthenticationError(
-            detail="Invalid token payload",
-        )
+    return CurrentUser(**request.state.user)
 
 
 def get_organization_service() -> OrganizationService:
