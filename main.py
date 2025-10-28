@@ -11,6 +11,7 @@ from core.exceptions import (
     ConflictError,
     ForbiddenError,
     NotFoundError,
+    ValidationError,
 )
 
 
@@ -36,7 +37,7 @@ app = FastAPI(
 @app.exception_handler(AuthenticationError)
 async def authentication_handler(request, exc):
     return JSONResponse(
-        status_code=401,
+        status_code=exc.status_code,
         content={"success": False, "message": str(exc)},
     )
 
@@ -44,7 +45,7 @@ async def authentication_handler(request, exc):
 @app.exception_handler(NotFoundError)
 async def not_found_handler(request, exc):
     return JSONResponse(
-        status_code=404,
+        status_code=exc.status_code,
         content={"success": False, "message": str(exc)},
     )
 
@@ -52,7 +53,7 @@ async def not_found_handler(request, exc):
 @app.exception_handler(ForbiddenError)
 async def forbidden_handler(request, exc):
     return JSONResponse(
-        status_code=403,
+        status_code=exc.status_code,
         content={"success": False, "message": str(exc)},
     )
 
@@ -60,7 +61,15 @@ async def forbidden_handler(request, exc):
 @app.exception_handler(ConflictError)
 async def conflict_handler(request, exc):
     return JSONResponse(
-        status_code=409,
+        status_code=exc.status_code,
+        content={"success": False, "message": str(exc)},
+    )
+
+
+@app.exception_handler(ValidationError)
+async def validation_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
         content={"success": False, "message": str(exc)},
     )
 

@@ -7,9 +7,7 @@ class NoteService:
         self, title: str, content: str, user_id: str, org_id: str, user_role: str
     ) -> Note:
         if user_role not in ["writer", "admin"]:
-            raise ForbiddenError(
-                status_code=403, detail="Only writers and admins can create notes"
-            )
+            raise ForbiddenError(detail="Only writers and admins can create notes")
 
         note = Note(
             title=title,
@@ -32,22 +30,22 @@ class NoteService:
     async def get_note(self, note_id: str, org_id: str) -> Note:
         note = await Note.get(note_id)
         if not note:
-            raise NotFoundError(status_code=404, detail="Note not found")
+            raise NotFoundError(detail="Note not found")
 
         if note.org_id != org_id:
-            raise NotFoundError(status_code=404, detail="Note not found")
+            raise NotFoundError(detail="Note not found")
 
         return note
 
     async def delete_note(self, note_id: str, org_id: str, user_role: str) -> None:
         if user_role != "admin":
-            raise ForbiddenError(status_code=403, detail="Only admins can delete notes")
+            raise ForbiddenError(detail="Only admins can delete notes")
 
         note = await Note.get(note_id)
         if not note:
-            raise NotFoundError(status_code=404, detail="Note not found")
+            raise NotFoundError(detail="Note not found")
 
         if note.org_id != org_id:
-            raise NotFoundError(status_code=404, detail="Note not found")
+            raise NotFoundError(detail="Note not found")
 
         await note.delete()

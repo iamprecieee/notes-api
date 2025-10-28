@@ -13,7 +13,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+    command: ["mongod", "--quiet", "--logpath", "/dev/null"]
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo:27017/admin?authSource=admin" --quiet
       interval: 10s
@@ -33,7 +33,6 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       ALGORITHM: ${ALGORITHM}
       ACCESS_TOKEN_EXPIRY: ${ACCESS_TOKEN_EXPIRY}
-      MIN_PASSWORD_LENGTH: ${MIN_PASSWORD_LENGTH}
       ENVIRONMENT: ${ENVIRONMENT}
     depends_on:
       mongo:

@@ -104,7 +104,6 @@ async def admin_token(client, test_org, test_admin_user):
         json={
             "email": "admin@test.com",
             "password": "Password123",
-            "org_id": str(test_org.id),
         },
     )
     return response.json()["data"]["access_token"]
@@ -117,7 +116,6 @@ async def writer_token(client, test_org, test_writer_user):
         json={
             "email": "writer@test.com",
             "password": "Password123",
-            "org_id": str(test_org.id),
         },
     )
     return response.json()["data"]["access_token"]
@@ -130,7 +128,6 @@ async def reader_token(client, test_org, test_reader_user):
         json={
             "email": "reader@test.com",
             "password": "Password123",
-            "org_id": str(test_org.id),
         },
     )
     return response.json()["data"]["access_token"]

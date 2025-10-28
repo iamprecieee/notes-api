@@ -31,20 +31,6 @@ git clone <repository-url>
 cd notes-api
 ```
 
-2. Start the application:
-```bash
-docker-compose up --build
-```
-
-The API will be available at `http://127.0.0.1:8000`
-
-## Local Setup
-
-1. Install dependencies:
-```bash
-pip install -e .
-```
-
 2. Create `.env` file:
 ```bash
 cp .env.example .env
@@ -56,22 +42,19 @@ DATABASE_NAME=notes_api
 SECRET_KEY=your-secret-key-here
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRY=30
-MIN_PASSWORD_LENGTH=8
 ENVIRONMENT=development
 MONGODB_USER=admin
 MONGODB_PASSWORD=secret
 MONGODB_DATABASE=notes_api
 ```
 
-4. Start MongoDB (if not using Docker):
+4. Start the application:
 ```bash
-mongod
+docker-compose up --build
 ```
 
-5. Run the application:
-```bash
-uvicorn main:app --reload
-```
+The API will be available at `http://127.0.0.1:8002`
+
 
 ## API Documentation
 
@@ -105,13 +88,28 @@ Response:
 ### 2. Create User
 
 ```bash
-curl -X POST "http://127.0.0.1:8002/organizations/507f1f77bcf86cd799439011/users/" \
+curl -X POST "http://127.0.0.1:8002/organizations/69001235df940e56abd60b72/users/" \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
     "password": "SecurePass123",
     "role": "writer"
   }'
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "id": "507f191e810c19729de860ea",
+    "email": "user@example.com",
+    "org_id": "507f1f77bcf86cd799439011",
+    "role": "writer",
+    "is_active": true,
+    "created_at": "2024-01-01T12:00:00Z"
+  }
+}
 ```
 
 ### 3. Login
@@ -166,14 +164,14 @@ curl -X GET "http://127.0.0.1:8002/notes/?limit=20&offset=0" \
 ### 6. Get Specific Note
 
 ```bash
-curl -X GET "http://127.0.0.1:8002/notes/507f191e810c19729de860ea" \
+curl -X GET "http://127.0.0.1:8002/notes/69001415df940e56abd60b77" \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
 ```
 
 ### 7. Delete Note (Admin Only)
 
 ```bash
-curl -X DELETE "http://127.0.0.1:8002/notes/507f191e810c19729de860ea" \
+curl -X DELETE "http://127.0.0.1:8002/notes/69001415df940e56abd60b77" \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
 ```
 

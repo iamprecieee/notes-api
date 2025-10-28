@@ -12,16 +12,13 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     password_bytes = password.encode("utf-8")
-    sha256_hash = hashlib.sha256(password_bytes).hexdigest()
-
-    return pwd_context.hash(sha256_hash)
+    return pwd_context.hash(password_bytes)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     password_bytes = plain_password.encode("utf-8")
-    sha256_hash = hashlib.sha256(password_bytes).hexdigest()
 
-    return pwd_context.verify(sha256_hash, hashed_password)
+    return pwd_context.verify(password_bytes, hashed_password)
 
 
 def create_access_token(data: Dict[str, Any]) -> str:

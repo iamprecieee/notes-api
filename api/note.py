@@ -98,7 +98,7 @@ async def get_note(
     )
 
 
-@router.delete("/{id}", response_model=SuccessResponse)
+@router.delete("/{id}", status_code=204)
 async def delete_note(
     id: str,
     current_user: Annotated[CurrentUser, Depends(get_current_user)],
@@ -108,9 +108,4 @@ async def delete_note(
         note_id=id,
         org_id=current_user.org_id,
         user_role=current_user.role,
-    )
-
-    return SuccessResponse(
-        data={"deleted": True},
-        message="Note deleted successfully",
     )

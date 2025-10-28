@@ -9,7 +9,6 @@ async def test_login_success(client: AsyncClient, test_org, test_admin_user):
         json={
             "email": "admin@test.com",
             "password": "Password123",
-            "org_id": str(test_org.id),
         },
     )
 
@@ -28,7 +27,6 @@ async def test_login_wrong_password(client: AsyncClient, test_org, test_admin_us
         json={
             "email": "admin@test.com",
             "password": "WrongPassword",
-            "org_id": str(test_org.id),
         },
     )
 
@@ -44,7 +42,6 @@ async def test_login_nonexistent_user(client: AsyncClient, test_org):
         json={
             "email": "nonexistent@test.com",
             "password": "Password123",
-            "org_id": str(test_org.id),
         },
     )
 

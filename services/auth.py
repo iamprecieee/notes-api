@@ -7,19 +7,13 @@ class AuthService:
     async def login(self, email: str, password: str) -> tuple[str, User]:
         user = await User.find_one(User.email == email)
         if not user:
-            raise AuthenticationError(
-                status_code=401, detail="Invalid email or password"
-            )
+            raise AuthenticationError(detail="Invalid email or password")
 
         if not verify_password(password, user.password):
-            raise AuthenticationError(
-                status_code=401, detail="Invalid email or password"
-            )
+            raise AuthenticationError(detail="Invalid email or password")
 
         if not user.is_active:
-            raise AuthenticationError(
-                status_code=401, detail="User account is inactive"
-            )
+            raise AuthenticationError(detail="User account is inactive")
 
         token_data = {
             "user_id": str(user.id),

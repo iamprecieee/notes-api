@@ -99,7 +99,7 @@ async def test_create_user_invalid_role(client: AsyncClient, test_org):
         },
     )
 
-    assert response.status_code == 422
+    assert response.status_code == 400
 
 
 @pytest.mark.asyncio
@@ -113,7 +113,7 @@ async def test_create_user_short_password(client: AsyncClient, test_org):
         },
     )
 
-    assert response.status_code == 422
+    assert response.status_code == 400
 
 
 @pytest.mark.asyncio

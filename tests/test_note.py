@@ -77,9 +77,8 @@ async def test_delete_note_as_admin(client: AsyncClient, admin_token, test_note)
         headers={"Authorization": f"Bearer {admin_token}"},
     )
 
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
+    assert response.status_code == 204
+    assert response.content == b""
 
 
 @pytest.mark.asyncio

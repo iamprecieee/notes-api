@@ -37,12 +37,10 @@ async def get_current_user(
         )
     except JWTError:
         raise AuthenticationError(
-            status_code=401,
             detail="Invalid authentication token",
         )
     except KeyError:
         raise AuthenticationError(
-            status_code=401,
             detail="Invalid token payload",
         )
 
