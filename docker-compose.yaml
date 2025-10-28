@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    container_name: notes-api-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo:27017/admin?authSource=admin" --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: notes-api-web
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+    environment:
+      MONGODB_URL: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo:27017
+      DATABASE_NAME: ${DATABASE_NAME}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+      ACCESS_TOKEN_EXPIRY: ${ACCESS_TOKEN_EXPIRY}
+      MIN_PASSWORD_LENGTH: ${MIN_PASSWORD_LENGTH}
+      ENVIRONMENT: ${ENVIRONMENT}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+
+volumes:
+  mongodb_data:
